@@ -1,0 +1,23 @@
+{
+  "name": "mypw",
+  "version": "0.0.0",
+  "description": "for playwright",
+  "main": "sample.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@playwright/test": "^0.180.0",
+    "js-yaml": "^4.0.0",
+    "playwright": "^1.8.0",
+    "playwright-cli": "^0.180.0",
+    "websocket": "^1.0.33"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "playwright",
+    "automate"
+  ],
+  "author": "atzhit7",
+  "license": "ISC"
+}
