@@ -1,0 +1,8 @@
+{
+    "testitem": "portal",
+    "subject": "UI testing",
+    "initialurl": "https://ges109lp:6143/geoevent/manager/",
+    "user": "USERNAME",
+    "userpassword": "PASSWORD",
+    "notification": true
+}
