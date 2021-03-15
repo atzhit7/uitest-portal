@@ -1,14 +1,55 @@
-const { firefox } = require('playwright');
+const { chromium, webkit, firefox } = require('playwright');
+const fs = require('fs');
+const process = require('process');
 
 (async () => {
   // start する前に config を read する。node だからできること。
+  // ほかコマンドラインのパラメーターの受け渡しも可能
+  // inputjson, url, user, password, --head
   // repository でまとめて管理
-  let fileContents = fs.readFileSync('./input.json', 'utf8');
-  let config = JSON.parse(fileContents);
+  let inputjson = '';
+  let headlessflag = true;
+  let baseURL = '';
+  let user = '';
+  let userpassword = '';
+  let notification = false;
+  let scshocnt = 0;
+
+  for (let i = 0; i < process.argv.length; i++) {
+    let arg = process.argv[i];
+    console.log(arg);
+    if (arg.includes('inputjson')) {
+      inputjson = arg.split("=")[1];
+    }
+    if (arg.includes('url')) {
+      baseURL = arg.split("=")[1];
+    }
+    if (arg.includes('user')) {
+      user = arg.split("=")[1];
+    }
+    if (arg.includes('password')) {
+      userpassword = arg.split("=")[1];
+    }
+    if (arg.includes("--head")) {
+      headlessflag = false;
+    }
+    if (arg.includes("--notification")) {
+      notification = true;
+    }
+  }
+
+  if (inputjson !== '') {
+    let fileContents = fs.readFileSync(inputfile, 'utf8');
+    let config = JSON.parse(fileContents);
+    baseURL = config.initialurl
+    user = config.user
+    userpassword = config.userpassword
+    notification = config.notification
+  }
 
   const browser = await firefox.launch({
-    headless: false,
-    slowMo: 1000
+    headless: headlessflag,
+    slowMo: 3000
   });
   const context = await browser.newContext({
     locale: 'ja-JP',
@@ -17,7 +58,6 @@ const { firefox } = require('playwright');
 
   // 結果的に、変な class つけられてることになるので、そこを追うくらいなら、
   // 自動で走らせることを考えれば waittimeout で時間をおいておけばいい気もしてきたな・・・
-  // await page.waitForTimeout(3000); 3 sec 待ち（Web の一般的なところ）
 
   // Open new page
   const page = await context.newPage();
@@ -26,123 +66,115 @@ const { firefox } = require('playwright');
   const savepath = './result/';
 
   // Go to https://agent1081final.esrij.com/portal/home/
-  await page.goto(config.initialurl+'/home/');
-  await page.route(config.initialurl + '/home/pages/Account/accept_conditions.html#client_id=arcgisonline&redirect_url=' + config.initialurl + '/home/', route => route.abort());
+  await page.goto(baseURL+'/home/');
+  await page.route(baseURL + '/home/pages/Account/accept_conditions.html#client_id=arcgisonline&redirect_url=' + baseURL + '/home/', route => route.abort());
   
   // Click text="OK"
   await page.waitForTimeout(3000);
-  await page.screenshot({ path: './1.png', fullPage: true });
-  // ログインメッセージがない場合（1-1 とどちらかができれば OK）
-  // await page.click('text="OK"');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
+  // ログインメッセージがある場合
+  if (notification) {
+    await page.click('text="OK"');
+  };
 
   // Login Phase
   // Click text="サイン イン"
-  await page.waitForTimeout(3000);
   await page.click('text="サイン イン"');
 
   // Fill input[aria-label="ユーザー名"]
-  await page.waitForTimeout(3000);
   await page.waitForSelector('button#signIn', { state: 'visible' });
-  await page.fill('input[aria-label="ユーザー名"]', 'portaladmin');
+  await page.fill('input[aria-label="ユーザー名"]', user);
   // Press Tab
   await page.press('input[aria-label="ユーザー名"]', 'Tab');
   // Fill input[aria-label="パスワード"]
-  await page.fill('input[aria-label="パスワード"]', 'passw0rd');
-  await page.screenshot({ path: './2.png', fullPage: true });
+  await page.fill('input[aria-label="パスワード"]', userpassword);
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   // Click text="サイン イン"
   await page.click('text="サイン イン"');
-
-  // Click //a[normalize-space(.)='メンバー' and normalize-space(@role)='tab']
-  await page.waitForSelector('main .trailer-half', {state: 'attached'});
-  await page.waitForTimeout(500);
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await page.screenshot({ path: './3.png', fullPage: true });
-
-  await page.click('//a[normalize-space(.)=\'メンバー\' and normalize-space(@role)=\'tab\']');
-
-  // Click //a[normalize-space(.)='ライセンス' and normalize-space(@role)='tab']
-  await page.waitForSelector('div .loader-bars', {state: 'hidden'});
-  await page.waitForTimeout(3000);
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await page.screenshot({ path: './4.png', fullPage: true });
-
-  await page.click('//a[normalize-space(.)=\'ライセンス\' and normalize-space(@role)=\'tab\']');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?#licenses');
-
-  await page.waitForSelector('div .loader-bars', {state: 'hidden'});
-  await page.waitForTimeout(3000);
-  await page.click('text="ユーザー タイプ"');
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await page.screenshot({ path: './5.png', fullPage: true });
-
-  // Click //a[normalize-space(.)='ステータス' and normalize-space(@role)='tab']
-  await page.click('//a[normalize-space(.)=\'ステータス\' and normalize-space(@role)=\'tab\']');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?#status');
-  await page.waitForTimeout(3000);
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await page.screenshot({ path: './6.png', fullPage: true });
 
   // **
   // 組織の設定一覧表示 START
   // **
-  await page.click('//a[normalize-space(.)=\'設定\' and normalize-space(@role)=\'tab\']')
+  // What happened without await syntax...
+  page.click('//a[normalize-space(.)=\'設定\' and normalize-space(@role)=\'tab\']');
   // Click text="ホーム ページ"
   await page.click('text="ホーム ページ"');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=homePage#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
 
   // Click div[id="main-content-area"] >> text="ギャラリー"
   await page.click('div[id="main-content-area"] >> text="ギャラリー"');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=gallery#settings');
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=gallery#settings');
+  
+
+  await page.click('div[id="main-content-area"] >> text="全般"');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
 
   // Click div[id="main-content-area"] >> text="マップ"
   await page.click('div[id="main-content-area"] >> text="マップ"');
-  
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=map#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=map#settings');
 
   // Click text="アイテム"
   await page.click('text="アイテム"');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=items#settings');
-
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=items#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   // Click div[id="main-content-area"] >> text="グループ"
   await page.click('div[id="main-content-area"] >> text="グループ"');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=groups#settings');
-
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=groups#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   // Click text="ユーティリティ サービス"
   await page.click('text="ユーティリティ サービス"');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=utilityServices#settings');
-
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=utilityServices#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   // Click text="ArcGIS Online"
   await page.click('text="ArcGIS Online"');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=agol#settings');
-
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=agol#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   // scroll page
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
   // Click text="サーバー"
   await page.click('text="サーバー"');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=servers#settings');
-
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=servers#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   // Click text="メンバー ロール"
   await page.click('text="メンバー ロール"');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=memberRoles#settings');
-
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=memberRoles#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   // Click text="新しいメンバーのデフォルト設定"
   await page.click('text="新しいメンバーのデフォルト設定"');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=newMemberDefaults#settings');
-
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=newMemberDefaults#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   // Click text="コラボレーション"
   await page.click('text="コラボレーション"');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=collaborations#settings');
-
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=collaborations#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   // Click text="セキュリティ"
   await page.click('text="セキュリティ"');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=security#settings');
-
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=security#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   // Click text="組織エクステンション"
   await page.click('text="組織エクステンション"');
-  // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?tab=orgExtensions#settings');
-
+  // assert.equal(page.url(), baseURL + '/home/organization.html?tab=orgExtensions#settings');
+  await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+  scshocnt += 1;
   // **
   // 組織の設定一覧表示 END
   // **
