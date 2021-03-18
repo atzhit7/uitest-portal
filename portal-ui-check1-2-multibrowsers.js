@@ -72,7 +72,7 @@ const process = require('process');
     
     // Click text="OK"
     await page.waitForTimeout(3000);
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // ログインメッセージがある場合
     if (notification) {
@@ -90,7 +90,7 @@ const process = require('process');
     await page.press('input[aria-label="ユーザー名"]', 'Tab');
     // Fill input[aria-label="パスワード"]
     await page.fill('input[aria-label="パスワード"]', userpassword);
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // Click text="サイン イン"
     await page.click('text="サイン イン"');
@@ -102,46 +102,46 @@ const process = require('process');
     page.click('//a[normalize-space(.)=\'設定\' and normalize-space(@role)=\'tab\']');
     // Click text="ホーム ページ"
     await page.click('text="ホーム ページ"');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
 
     // Click div[id="main-content-area"] >> text="ギャラリー"
     await page.click('div[id="main-content-area"] >> text="ギャラリー"');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=gallery#settings');
     
 
     await page.click('div[id="main-content-area"] >> text="全般"');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
 
     // Click div[id="main-content-area"] >> text="マップ"
     await page.click('div[id="main-content-area"] >> text="マップ"');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=map#settings');
 
     // Click text="アイテム"
     await page.click('text="アイテム"');
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=items#settings');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // Click div[id="main-content-area"] >> text="グループ"
     await page.click('div[id="main-content-area"] >> text="グループ"');
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=groups#settings');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // Click text="ユーティリティ サービス"
     await page.click('text="ユーティリティ サービス"');
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=utilityServices#settings');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // Click text="ArcGIS Online"
     await page.click('text="ArcGIS Online"');
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=agol#settings');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // scroll page
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
@@ -149,32 +149,32 @@ const process = require('process');
     // Click text="サーバー"
     await page.click('text="サーバー"');
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=servers#settings');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // Click text="メンバー ロール"
     await page.click('text="メンバー ロール"');
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=memberRoles#settings');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // Click text="新しいメンバーのデフォルト設定"
     await page.click('text="新しいメンバーのデフォルト設定"');
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=newMemberDefaults#settings');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // Click text="コラボレーション"
     await page.click('text="コラボレーション"');
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=collaborations#settings');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // Click text="セキュリティ"
     await page.click('text="セキュリティ"');
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=security#settings');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // Click text="組織エクステンション"
     await page.click('text="組織エクステンション"');
     // assert.equal(page.url(), baseURL + '/home/organization.html?tab=orgExtensions#settings');
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // **
     // 組織の設定一覧表示 END

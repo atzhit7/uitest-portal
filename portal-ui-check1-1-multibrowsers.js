@@ -70,7 +70,7 @@ const process = require('process');
     await page.route(baseURL + '/home/pages/Account/accept_conditions.html#client_id=arcgisonline&redirect_url=' + baseURL + '/home/', route => route.abort());
     
     // Click text="OK"
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
 
     // ログインメッセージがある場合
@@ -88,7 +88,7 @@ const process = require('process');
     await page.press('input[aria-label="ユーザー名"]', 'Tab');
     // Fill input[aria-label="パスワード"]
     await page.fill('input[aria-label="パスワード"]', userpassword);
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     // Click text="サイン イン"
     await page.click('text="サイン イン"');
@@ -96,7 +96,7 @@ const process = require('process');
     // Click //a[normalize-space(.)='メンバー' and normalize-space(@role)='tab']
     await page.waitForSelector('main .trailer-half', {state: 'attached'});
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
 
     await page.click('//a[normalize-space(.)=\'メンバー\' and normalize-space(@role)=\'tab\']');
@@ -104,7 +104,7 @@ const process = require('process');
     // Click //a[normalize-space(.)='ライセンス' and normalize-space(@role)='tab']
     await page.waitForSelector('div .loader-bars', {state: 'hidden'});
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
 
     await page.click('//a[normalize-space(.)=\'ライセンス\' and normalize-space(@role)=\'tab\']');
@@ -113,14 +113,14 @@ const process = require('process');
     await page.waitForSelector('div .loader-bars', {state: 'hidden'});
     await page.click('text="ユーザー タイプ"');
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
 
     // Click //a[normalize-space(.)='ステータス' and normalize-space(@role)='tab']
     await page.click('//a[normalize-space(.)=\'ステータス\' and normalize-space(@role)=\'tab\']');
     // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?#status');
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.screenshot({ path: './'+scshocnt+'.png', fullPage: true });
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     
     // Close page
