@@ -1,11 +1,11 @@
-const { chromium, webkit, firefox } = require('playwright');
+const playwright = require('playwright');
 const fs = require('fs');
 const process = require('process');
 
 (async () => {
   // start する前に config を read する。node だからできること。
   // ほかコマンドラインのパラメーターの受け渡しも可能
-  // inputjson, url, user, password, --head
+  // inputjson, url, user, password, browsers, --head, --notification
   // repository でまとめて管理
   let inputjson = '';
   let headlessflag = true;
@@ -14,6 +14,7 @@ const process = require('process');
   let userpassword = '';
   let notification = false;
   let scshocnt = 0;
+  let browserType = ''
 
   for (let i = 0; i < process.argv.length; i++) {
     let arg = process.argv[i];
@@ -36,6 +37,9 @@ const process = require('process');
     if (arg.includes("--notification")) {
       notification = true;
     }
+    if (arg.includes("browsers")) {
+      browserType =  arg.split("=")[1]
+    }
   }
 
   if (inputjson !== '') {
@@ -47,14 +51,14 @@ const process = require('process');
     notification = config.notification
   }
 
-  const browser = await firefox.launch({
+  const browser = await playwright[browserType].launch({
     headless: headlessflag,
     slowMo: 3000
-  });
+  })
   const context = await browser.newContext({
     locale: 'ja-JP',
     ignoreHTTPSErrors: true
-  });
+  })
 
   // 結果的に、変な class つけられてることになるので、そこを追うくらいなら、
   // 自動で走らせることを考えれば waittimeout で時間をおいておけばいい気もしてきたな・・・
