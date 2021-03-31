@@ -1,6 +1,7 @@
 const playwright = require('playwright');
 const fs = require('fs');
 const process = require('process');
+const { frame } = require('websocket');
 
 console.log(process.argv);
 
@@ -125,11 +126,47 @@ console.log(process.argv);
     // Click //a[normalize-space(.)='ステータス' and normalize-space(@role)='tab']
     await page.click('//a[normalize-space(.)=\'ステータス\' and normalize-space(@role)=\'tab\']');
     // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?#status');
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
-    scshocnt += 1;
+    let frames = await page.frames()
+    const frame_1736 = frames.find(f => f.url() === 'https://agent1081final.esrij.com/portal/apps/activitydashboard/usage.html?embedded=1&locale=ja')
+    await frame_1736.waitForSelector('#tabContainer_tablist #tabContainer_tablist_usersTab')
+    await frame_1736.click('#tabContainer_tablist #tabContainer_tablist_usersTab')
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true })
+    scshocnt += 1
+    // await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    // await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     
-    // Close page
+    await frame_1736.waitForSelector('#tabContainer_tablist #tabContainer_tablist_itemsTab')
+    await frame_1736.click('#tabContainer_tablist #tabContainer_tablist_itemsTab')
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true })
+    scshocnt += 1
+    await frame_1736.waitForSelector('#tabContainer_tablist #tabContainer_tablist_groupsTab')
+    await frame_1736.click('#tabContainer_tablist #tabContainer_tablist_groupsTab')
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true })
+    scshocnt += 1
+
+    // goto my content
+    // await page.waitForSelector('.esri-header-menus-menu > .esri-header-menus-list > .esri-header-menus-item > #esri-header-menus-link-desktop-0-6 > .esri-header-menus-link-label')
+    await page.click('.esri-header-menus-menu > .esri-header-menus-list > .esri-header-menus-item > #esri-header-menus-link-desktop-0-6 > .esri-header-menus-link-label')
+    await page.waitForLoadState("networkidle")
+    
+    // await page.waitForSelector('.esri-header-menus-menu > .esri-header-menus-list > .esri-header-menus-item > #esri-header-menus-link-desktop-0-5 > .esri-header-menus-link-label')
+
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true })
+    scshocnt += 1
+
+    await page.click('.esri-header-menus-menu > .esri-header-menus-list > .esri-header-menus-item > #esri-header-menus-link-desktop-0-5 > .esri-header-menus-link-label')
+    // await page.waitForSelector('.esri-header-menus-menu > .esri-header-menus-list > .esri-header-menus-item > #esri-header-menus-link-desktop-0-1 > .esri-header-menus-link-label')
+
+    await page.waitForLoadState("networkidle")
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true })
+    scshocnt += 1
+    
+    await page.click('.esri-header-menus-menu > .esri-header-menus-list > .esri-header-menus-item > #esri-header-menus-link-desktop-0-1 > .esri-header-menus-link-label')
+    
+    await page.waitForLoadState("networkidle")
+    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true })
+    scshocnt += 1
+    
     await page.close();
 
     // ---------------------
