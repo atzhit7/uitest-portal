@@ -1,4 +1,5 @@
 const { firefox } = require('playwright');
+const process = require('process');
 
 (async () => {
   // start する前に config を read する。node だからできること。
@@ -173,7 +174,7 @@ const { firefox } = require('playwright');
   
     // Close page
     await page.close();
-    
+
     // ---------------------
     await context.close();
     await browser.close();
