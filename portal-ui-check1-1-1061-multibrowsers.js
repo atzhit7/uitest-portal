@@ -12,7 +12,7 @@ const process = require('process');
   let user = ''
   let userpassword = ''
   let notification = false
-  let browserType = ''
+  let tryBrowserTypes = ''
 
   for (let i = 0; i < process.argv.length; i++) {
     let arg = process.argv[i];
@@ -37,7 +37,7 @@ const process = require('process');
       notification = true;
     }
     if (arg.includes("browsers")) {
-      browserType =  arg.split("=")[1]
+      tryBrowserTypes =  arg.split("=")[1]
     }
   }
 
@@ -50,7 +50,7 @@ const process = require('process');
     notification = config.notification
   }
 
-  browserTypes = browserTypesarg.split(",")
+  browserTypes = tryBrowserTypes.split(",")
 
   const { hostname } = new URL(baseURL)
   console.log(hostname)
