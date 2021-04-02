@@ -127,7 +127,7 @@ console.log(process.argv);
     await page.click('//a[normalize-space(.)=\'ステータス\' and normalize-space(@role)=\'tab\']');
     // assert.equal(page.url(), 'https://agent1081final.esrij.com/portal/home/organization.html?#status');
     let frames = await page.frames()
-    const frame_1736 = frames.find(f => f.url() === 'https://agent1081final.esrij.com/portal/apps/activitydashboard/usage.html?embedded=1&locale=ja')
+    const frame_1736 = frames.find(f => f.url() === baseURL + '/apps/activitydashboard/usage.html?embedded=1&locale=ja')
     await frame_1736.waitForSelector('#tabContainer_tablist #tabContainer_tablist_usersTab')
     await frame_1736.click('#tabContainer_tablist #tabContainer_tablist_usersTab')
     await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true })
