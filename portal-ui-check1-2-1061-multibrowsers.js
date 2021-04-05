@@ -52,7 +52,6 @@ const process = require('process');
   }
 
   const browserTypes = tryBrowserTypes.split(",")
-
   const { hostname } = new URL(baseURL)
   console.log(hostname)
 
@@ -79,9 +78,6 @@ const process = require('process');
     await page.click('.clearfix > #header #login-link')
     
     await navigationPromise
-    await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
-    scshocnt += 1;
-  
     let frames = await page.frames()
     const frame_119 = frames.find(f => f.url() === baseURL + '/sharing/rest/oauth2/authorize?client_id=arcgisonline&redirect_uri=' + baseURL +'/home/postsignin.html&response_type=token&display=iframe&parent=https://'+ hostname + '&expiration=20160&locale=ja')
     await frame_119.waitForSelector('.formContainer > #oauth > #fieldSet #user_username')

@@ -13,7 +13,7 @@ const process = require('process');
   let user = ''
   let userpassword = ''
   let notification = false
-  let browserTypes = []
+  let tryBrowserTypes = ''
 
   for (let i = 0; i < process.argv.length; i++) {
     let arg = process.argv[i];
@@ -37,11 +37,11 @@ const process = require('process');
       notification = true;
     }
     if (arg.includes("browsers")) {
-      browserTypesarg =  arg.split("=")[1]
+      tryBrowserTypes =  arg.split("=")[1]
     }
   }
 
-  browserTypes = browserTypesarg.split(",")
+  const browserTypes = tryBrowserTypes.split(",")
 
   if (inputjson !== '') {
     let fileContents = fs.readFileSync(inputfile, 'utf8');
