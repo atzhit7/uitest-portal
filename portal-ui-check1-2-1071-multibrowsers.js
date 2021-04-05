@@ -13,7 +13,7 @@ const process = require('process');
   let user = ''
   let userpassword = ''
   let notification = false
-  let browserTypes = []
+  let tryBrowserTypes = ''
 
   for (let i = 0; i < process.argv.length; i++) {
     let arg = process.argv[i];
@@ -37,11 +37,9 @@ const process = require('process');
       notification = true;
     }
     if (arg.includes("browsers")) {
-      browserTypesarg =  arg.split("=")[1]
+      tryBrowserTypes =  arg.split("=")[1]
     }
   }
-
-  browserTypes = browserTypesarg.split(",")
 
   if (inputjson !== '') {
     let fileContents = fs.readFileSync(inputfile, 'utf8');
@@ -51,6 +49,10 @@ const process = require('process');
     userpassword = config.userpassword
     notification = config.notification
   }
+
+  const browserTypes = tryBrowserTypes.split(",")
+  const { hostname } = new URL(baseURL)
+  console.log(hostname)
 
   for (const browserType of browserTypes){
     let scshocnt = 0
@@ -69,9 +71,6 @@ const process = require('process');
 
     // Open new page
     const page = await context.newPage();
-
-    const icnt = 0;
-    const savepath = './result/';
 
     // Go to https://agent1081final.esrij.com/portal/home/
     await page.goto(baseURL+'/home/');

@@ -70,9 +70,6 @@ const process = require('process');
     // Open new page
     const page = await context.newPage();
 
-    const icnt = 0;
-    const savepath = './result/';
-
     // Go to https://agent1081final.esrij.com/portal/home/
     await page.goto(baseURL+'/home/');
     await page.route(baseURL + '/home/pages/Account/accept_conditions.html#client_id=arcgisonline&redirect_url=' + baseURL + '/home/', route => route.abort());
