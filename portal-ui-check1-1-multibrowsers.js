@@ -1,7 +1,6 @@
 const playwright = require('playwright');
 const fs = require('fs');
 const process = require('process');
-const { frame } = require('websocket');
 
 console.log(process.argv);
 

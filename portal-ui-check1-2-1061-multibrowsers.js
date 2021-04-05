@@ -1,4 +1,5 @@
-const { firefox } = require('playwright');
+const playwright = require('playwright');
+const fs = require('fs');
 const process = require('process');
 
 (async () => {

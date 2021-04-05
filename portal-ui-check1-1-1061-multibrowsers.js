@@ -1,4 +1,5 @@
 const playwright = require('playwright');
+const fs = require('fs');
 const process = require('process');
 
 (async () => {
@@ -139,12 +140,14 @@ const process = require('process');
     await page.waitForSelector('#header #siteHeader-groups')
     await page.click('#header #siteHeader-groups')
     await navigationPromise
+    await page.waitForTimeout(5000)
     await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
     
     await page.waitForSelector('#header #siteHeader-gallery')
     await page.click('#header #siteHeader-gallery')
     await navigationPromise
+    await page.waitForTimeout(5000)
     await page.screenshot({ path: './'+ browserType + scshocnt+'.png', fullPage: true });
     scshocnt += 1;
   
