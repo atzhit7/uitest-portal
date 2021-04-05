@@ -69,6 +69,7 @@ const process = require('process');
     })
   
     const page = await context.newPage()
+    const navigationPromise = page.waitForNavigation()
     
     await page.goto(baseURL+'/home/')
     

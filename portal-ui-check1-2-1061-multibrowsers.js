@@ -52,6 +52,7 @@ const process = require('process');
   }
 
   const browserTypes = tryBrowserTypes.split(",")
+
   const { hostname } = new URL(baseURL)
   console.log(hostname)
 
@@ -69,6 +70,8 @@ const process = require('process');
     })
   
     const page = await context.newPage()
+    
+    const navigationPromise = page.waitForNavigation()
     
     await page.goto(baseURL+'/home/')
     
